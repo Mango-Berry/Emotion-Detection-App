@@ -7,6 +7,7 @@ from kivy.uix.screenmanager import ScreenManager, Screen, NoTransition
 from kivy.core.window import Window
 from kivy.uix.textinput import TextInput
 import time
+
 Builder.load_string('''
 <CameraScreen>:
     BoxLayout:
@@ -17,6 +18,7 @@ Builder.load_string('''
         Button:
             text: 'Capture'
             on_press: root.capture()
+            background_normal: 'button.png'
 
 <MenuScreen>:
     BoxLayout:
@@ -33,13 +35,13 @@ Builder.load_string('''
             pos_hint: {'center_x':.5, 'center_y':.5}
         Button:
             text: 'Login'
-            background_normal: 'Rectangle 1.png'
+            background_normal: 'button.png'
             on_press: root.manager.current = 'login'
             size_hint: 0.4, 0.2
             pos_hint: {'center_x':.5, 'center_y':.7}
         Button:
             text: 'Signup'
-            background_normal: 'Rectangle 1.png'
+            background_normal: 'button.png'
             on_press: root.manager.current = 'signup'
             pos_hint: {'center_x':.5, 'center_y': .8}
             size_hint: 0.4, 0.2
@@ -58,7 +60,7 @@ Builder.load_string('''
             multiline:False
         Button:
             text: 'Enter'
-            background_normal: 'Rectangle 1.png'
+            background_normal: 'button.png'
             on_press: root.manager.current = 'home'
             size_hint: 0.4, 0.2
             pos_hint: {'center_x':.5, 'center_y':.7}
@@ -77,7 +79,7 @@ Builder.load_string('''
             multiline:False
         Button:
             text: 'Enter'
-            background_normal: 'Rectangle 1.png'
+            background_normal: 'button.png'
             on_press: root.process()
             size_hint: 0.4, 0.2
             pos_hint: {'center_x':.5, 'center_y':.7}
@@ -91,25 +93,25 @@ Builder.load_string('''
             pos_hint: {'center_x':.5, 'center_y':.3}
         Button:
             text: 'Camera'
-            background_normal: 'Rectangle 1.png'
+            background_normal: 'button.png'
             on_press: root.manager.current = 'camera'
             size_hint: 0.4, 0.2
             pos_hint: {'center_x':.5, 'center_y':.7}
         Button:
             text: 'Gallery'
-            background_normal: 'Rectangle 1.png'
+            background_normal: 'button.png'
             on_press: root.manager.current = 'gallery'
             pos_hint: {'center_x':.5, 'center_y': .8}
             size_hint: 0.4, 0.2
         Button:
             text: 'Profile'
-            background_normal: 'Rectangle 1.png'
+            background_normal: 'button.png'
             on_press: root.manager.current = 'camera'
             size_hint: 0.4, 0.2
             pos_hint: {'center_x':.5, 'center_y':.9}
         Button:
             text: 'Stats'
-            background_normal: 'Rectangle 1.png'
+            background_normal: 'button.png'
             on_press: root.manager.current = 'gallery'
             pos_hint: {'center_x':.5, 'center_y': 1}
             size_hint: 0.4, 0.2
@@ -120,7 +122,8 @@ class CameraScreen(Screen):
     def capture(self):
         camera = self.ids['camera']
         timestr = time.strftime("%Y%m%d_%H%M%S")
-        camera.export_to_png("IMG_" + timestr)
+        camera.export_to_png("user_images/IMG_" + timestr)
+        print("captured")
 
 
 class MenuScreen(Screen):
@@ -131,7 +134,7 @@ class LoginScreen(Screen):
     def process(self):
         username = self.ids.input_user.text
         password = self.ids.input_pass.text
-        #firebase
+        # firebase
         ScreenManager.switch_to = 'home'
 
 
@@ -139,7 +142,7 @@ class SignupScreen(Screen):
     def process(self):
         username = self.ids.input_user.text
         password = self.ids.input_pass.text
-        #firebase
+        # firebase
 
 
 class HomeScreen(Screen):
