@@ -14,22 +14,22 @@
             id: camera
             play: True
         GridLayout:
-            cols: 2
-            rows: 1
+            cols: 1
+            rows: 2
             Button:
-                text: 'Capture'
-                on_press: root.capture()
-                background_normal: 'button.png'
-                size_hint_y: None
-                height: '48dp'
-                width: '100dp'
-            Button:
-                text: 'Detect Mood'
+                text: 'Capture + Detect Mood'
                 on_press: root.detect_mood()
                 background_normal: 'button.png'
                 size_hint_y: None
                 height: '48dp'
                 width: '100dp'
+            Button:
+                text: 'Back'
+                on_press: root.manager.current = 'home'
+                background_normal: 'button.png'
+                size_hint: 0.5, 0.05
+                font_size: 20
+                font_name: 'Lucida'
         
 <MenuScreen>:
     BoxLayout:
@@ -172,9 +172,56 @@
             size_hint: 0.5, 0.05
             font_size: 20
             font_name: 'Lucida'
+
 <ProfileScreen>:
+    BoxLayout:
+        Button:
+            text: 'Back'
+            on_press: root.manager.current = 'home'
+            background_normal: 'button.png'
+            size_hint: 0.5, 0.05
+            font_size: 20
+            font_name: 'Lucida'
 
 <GalleryScreen>:
+    BoxLayout:
+        GridLayout:
+            cols: 3
+            rows: 3
+            Image:
+                id: image1
+                source: 'blank.png'
+            Image:
+                id: image2
+                source: 'blank.png'
+            Image:
+                id: image3
+                source: 'blank.png'
+            Image:
+                id: image4
+                source: 'blank.png'
+            Image:
+                id: image5
+                source: 'blank.png'
+            Image:
+                id: image6
+                source: 'blank.png'
+            Image:
+                id: image7
+                source: 'blank.png'
+            Image:
+                id: image8
+                source: 'blank.png'
+            Image:
+                id: image9
+                source: 'blank.png'
+        Button:
+            text: 'Back'
+            on_press: root.manager.current = 'home'
+            background_normal: 'button.png'
+            size_hint: 0.5, 0.05
+            font_size: 20
+            font_name: 'Lucida'
 
 <LogScreen>:
     BoxLayout:
@@ -194,3 +241,10 @@
                 size_hint_y: None
                 height: '48dp'
                 width: '100dp'
+        Button:
+            text: 'Back'
+            on_press: root.manager.current = 'home'
+            background_normal: 'button.png'
+            size_hint: 0.5, 0.05
+            font_size: 20
+            font_name: 'Lucida'

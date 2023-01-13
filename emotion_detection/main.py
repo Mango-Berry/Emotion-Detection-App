@@ -7,7 +7,7 @@ from kivy.uix.screenmanager import ScreenManager, Screen, NoTransition
 from kivy.core.window import Window
 from kivy.uix.textinput import TextInput
 from kivy.core.text import LabelBase
-import time
+import time, glob
 import matplotlib.pyplot as plt
 
 Builder.load_file('emotion_detection/kv_file.kv')
@@ -16,16 +16,14 @@ class MenuScreen(Screen):
     pass
 
 class CameraScreen(Screen):
-    def capture(self):
-        camera = self.ids['camera']
-        timestr = time.strftime("%Y%m%d_%H%M%S")
-        camera.export_to_png("emotion_detection/user_images/IMG_{}.png".format(timestr))
-    
     def detect_mood(self):
-        self.capture()
+        camera = self.ids.camera
+        timestr = time.strftime("%Y%m%d_%H%M%S")
 
         #insert cnn code here (specifcally the mood detecting function call)
         mood = 'Happy'
+        dict_labels = {'Angry': 1, 'Disgust': 2, 'Fear': 3, 'Happy': 4, 'Sad': 5, 'Surprised': 6, 'Neutral': 7}
+        camera.export_to_png("emotion_detection/user_images/IMG_{}_{}.png".format(timestr, dict_labels[mood]))
         self.ids.mood_label.text = "Mood Detected: " + mood
         file = open("moodlog.txt", "a") 
         file.write("{}\n".format(mood))
@@ -33,7 +31,16 @@ class CameraScreen(Screen):
         return 0
 
 class GalleryScreen(Screen):
-    pass
+    def __init__ (self, **kwargs):
+        self.name='gallery'
+        super().__init__(**kwargs)
+        count = 1
+        for file in sorted(glob.glob('emotion_detection/user_images/*.png')):
+            if(count <= 9):
+                self.ids['image{}'.format(count)].source = file
+                count += 1
+            else:
+                break
 
 class LoginScreen(Screen):
     def process(self):
@@ -65,10 +72,8 @@ class LogScreen(Screen):
         for line in file.readlines():
             dict_labels[line.strip()] += 1
         sizes = [dict_labels['Angry'], dict_labels['Disgust'], dict_labels['Fear'], dict_labels['Happy'], dict_labels['Sad'], dict_labels['Surprised'], dict_labels['Neutral'] ]
-        explode = (0, 0, 0, 0, 0, 0, 0)
         fig1, ax1 = plt.subplots()
-        ax1.pie(sizes, explode=explode, labels=labels, autopct='%1.1f%%',
-                shadow=True, startangle=90)
+        ax1.pie(sizes, labels=labels, autopct='%1.1f%%', shadow=True, startangle=90)
         ax1.axis('equal') 
         plt.savefig('latest_plot.png')
         self.ids.image.source = 'latest_plot.png'
