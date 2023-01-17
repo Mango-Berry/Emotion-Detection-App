@@ -1,7 +1,6 @@
 # Emotion-Detection-App
-
-# Some instruction for downloading get the package is to working 
-# This is for vscode using macOS so it probably a little different for Windows
+Some instruction for downloading get the package is to working 
+This is for vscode using macOS so it probably a little different for Windows
 
 # First step in the terminal
 pip3 install flask flask_sqlalchemy flask_login flask_bcrypt flask_wtf wtforms email_validator
