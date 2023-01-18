@@ -9,6 +9,7 @@ from kivy.uix.textinput import TextInput
 from kivy.core.text import LabelBase
 import time, glob
 import matplotlib.pyplot as plt
+import Process_Image as process_image
 
 Builder.load_file('emotion_detection/kv_file.kv')
 
@@ -19,11 +20,16 @@ class CameraScreen(Screen):
     def detect_mood(self):
         camera = self.ids.camera
         timestr = time.strftime("%Y%m%d_%H%M%S")
-
-        #insert cnn code here (specifcally the mood detecting function call)
-        mood = 'Happy'
         dict_labels = {'Angry': 1, 'Disgust': 2, 'Fear': 3, 'Happy': 4, 'Sad': 5, 'Surprised': 6, 'Neutral': 7}
-        camera.export_to_png("emotion_detection/user_images/IMG_{}_{}.png".format(timestr, dict_labels[mood]))
+        path = "emotion_detection/user_images/IMG_{}.png".format(timestr)
+
+        camera.export_to_png(path)
+
+        model = process_image.Model("model.json", "model_weights.h5")
+        img = model.load_img_from_path(path)
+        mood = model.predict_emotion(img)
+
+        camera.export_to_png("emotion_detection/user_images_labeled/IMG_{}.png".format(dict_labels[mood]))
         self.ids.mood_label.text = "Mood Detected: " + mood
         file = open("moodlog.txt", "a") 
         file.write("{}\n".format(mood))
@@ -62,8 +68,6 @@ class ProfileScreen(Screen):
     pass
 
 class LogScreen(Screen):
-    # access a text file/spreadsheet with a list of the moods already recognized and their dates
-    # or create a calendar with moods
     def pie_chart(self):
         labels = 'Angry', 'Disgust', 'Fear', 'Happy', 'Sad', 'Surprised', 'Neutral'
         dict_labels = {'Angry': 0, 'Disgust': 0, 'Fear': 0, 'Happy': 0, 'Sad': 0, 'Surprised': 0, 'Neutral': 0}
