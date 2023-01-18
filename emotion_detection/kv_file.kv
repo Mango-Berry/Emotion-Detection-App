@@ -92,7 +92,7 @@
         Button:
             text: 'Enter'
             background_normal: 'button.png'
-            on_press: root.manager.current = 'home'
+            on_press: root.process()
             font_name: 'Lucida'
             font_size: 20
             size_hint: 0.5, 0.05
@@ -125,7 +125,7 @@
         Button:
             text: 'Enter'
             background_normal: 'button.png'
-            on_press: root.manager.current = 'home'
+            on_press: root.process()
             font_name: 'Lucida'
             font_size: 20
             size_hint: 0.5, 0.05
@@ -157,14 +157,6 @@
             font_size: 20
             font_name: 'Lucida'
         Button:
-            text: 'Profile'
-            background_normal: 'button.png'
-            on_press: root.manager.current = 'profile'
-            font_size: 20
-            size_hint: 0.5, 0.05
-            pos_hint: {'center_x':.5, 'center_y':.9}
-            font_name: 'Lucida'
-        Button:
             text: 'Mood Log'
             background_normal: 'button.png'
             on_press: root.manager.current = 'log'
@@ -172,15 +164,13 @@
             size_hint: 0.5, 0.05
             font_size: 20
             font_name: 'Lucida'
-
-<ProfileScreen>:
-    BoxLayout:
         Button:
-            text: 'Back'
-            on_press: root.manager.current = 'home'
+            text: 'Logout'
             background_normal: 'button.png'
-            size_hint: 0.5, 0.05
+            on_press: root.logout()
             font_size: 20
+            size_hint: 0.5, 0.05
+            pos_hint: {'center_x':.5, 'center_y':.9}
             font_name: 'Lucida'
 
 <GalleryScreen>:

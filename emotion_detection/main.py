@@ -9,6 +9,15 @@ from kivy.uix.textinput import TextInput
 from kivy.core.text import LabelBase
 import time, glob
 import matplotlib.pyplot as plt
+from flask import Flask, render_template, url_for, redirect
+from flask_sqlalchemy import SQLAlchemy
+from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user
+from flask_wtf import FlaskForm
+from wtforms import StringField, PasswordField, SubmitField
+from wtforms.validators import InputRequired, Length, ValidationError
+from flask_bcrypt import Bcrypt
+import sqlite3
+from threading import Thread
 
 Builder.load_file('emotion_detection/kv_file.kv')
 
@@ -44,26 +53,25 @@ class GalleryScreen(Screen):
 
 class LoginScreen(Screen):
     def process(self):
-        username = self.ids.input_user.text
-        password = self.ids.input_pass.text
-        # auth code
-        ScreenManager.switch_to = 'home'
+        input_username = self.ids.input_user.text
+        input_password = self.ids.input_pass.text
+        if main_app.login(input_username, input_password):
+            ScreenManager.switch_to = 'home'
 
 class SignupScreen(Screen):
     def process(self):
-        username = self.ids.input_user.text
-        password = self.ids.input_pass.text
-        # auth code
-
+        input_username = self.ids.input_user.text
+        input_password = self.ids.input_pass.text
+        if main_app.register(input_username, input_password):
+            ScreenManager.switch_to = 'home'
+        
 class HomeScreen(Screen):
-    pass
-
-class ProfileScreen(Screen):
-    pass
+    @login_required
+    def logout(self):
+        logout_user()
+        ScreenManager.switch_to = 'menu'
 
 class LogScreen(Screen):
-    # access a text file/spreadsheet with a list of the moods already recognized and their dates
-    # or create a calendar with moods
     def pie_chart(self):
         labels = 'Angry', 'Disgust', 'Fear', 'Happy', 'Sad', 'Surprised', 'Neutral'
         dict_labels = {'Angry': 0, 'Disgust': 0, 'Fear': 0, 'Happy': 0, 'Sad': 0, 'Surprised': 0, 'Neutral': 0}
@@ -90,7 +98,47 @@ class MainApp(App):
         sm.add_widget(HomeScreen(name='home'))
         sm.add_widget(CameraScreen(name='camera_page'))
         sm.add_widget(GalleryScreen(name='gallery'))
-        sm.add_widget(ProfileScreen(name='profile'))
         sm.add_widget(LogScreen(name='log'))
+        Thread(target=self.start_flask).start()
         return sm
-MainApp().run()
+
+    def start_flask(self):
+        self.flask_app = Flask(__name__)
+        self.db = SQLAlchemy(self.flask_app)
+        self.bcrypt = Bcrypt(self.flask_app)
+
+        self.flask_app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
+        self.flask_app.config["SECRET_KEY"] = "Secret Key"
+        self.db.init_app(self.flask_app)
+
+        login_manager = LoginManager()
+        login_manager.init_app(self.flask_app)
+        login_manager.login_view = "login"
+
+        @login_manager.user_loader
+        def load_user(user_id):
+            return User.query.get(int(user_id))
+
+        class User(self.db.Model, UserMixin):
+            id = self.db.Column(self.db.INTEGER, primary_key=True)
+            username = self.db.Column(self.db.String(20), nullable=False, unique=True)
+            password = self.db.Column(self.db.String(80), nullable=False)
+        self.User = User()
+        self.flask_app.run(debug=True)
+
+    def login(self, input_username, input_password):
+        with self.flask_app.app_context():
+            user = self.User.query.filter_by(username=input_username).first()    
+            if user:
+                if self.bcrypt.check_password_hash(user.password, input_password):
+                    login_user(user)
+
+    def register(self, input_username, input_password):
+        with self.flask_app.app_context():
+            hashed_password = self.bcrypt.generate_password_hash(input_password)
+            new_user = self.User(username=input_username, password=hashed_password)
+            self.db.session.add(new_user)
+            self.db.session.commit()
+
+main_app = MainApp()
+main_app.run()
