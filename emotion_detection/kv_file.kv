@@ -1,36 +1,3 @@
-<CameraScreen>:
-    BoxLayout:
-        orientation: 'vertical'
-        Label:
-            id: mood_label
-            text: 'Mood Detected: '
-            color: 0, 0, 0, 1
-            size_hint_y: None
-            halign: 'center'
-            font_size: 25
-            text_size: self.size
-            font_name: 'Lucida'
-        Camera:
-            id: camera
-            play: True
-        GridLayout:
-            cols: 1
-            rows: 2
-            Button:
-                text: 'Capture + Detect Mood'
-                on_press: root.detect_mood()
-                background_normal: 'button.png'
-                size_hint_y: None
-                height: '48dp'
-                width: '100dp'
-            Button:
-                text: 'Back'
-                on_press: root.manager.current = 'home'
-                background_normal: 'button.png'
-                size_hint: 0.5, 0.05
-                font_size: 20
-                font_name: 'Lucida'
-        
 <MenuScreen>:
     BoxLayout:
         orientation: 'vertical'
@@ -71,7 +38,15 @@
     BoxLayout:
         orientation: 'vertical'
         Label:
-            size_hint: 1, 0.3
+            size_hint_y: 0.1
+        Label:
+            text: 'Login with your profile information to access Moodsense'
+            color: 0, 0, 0, 1
+            font_size: 25
+            halign: 'center'
+            size_hint_y: None
+            height: self.texture_size[1]
+            padding_y: 15
         TextInput:
             id: input_user
             hint_text:'Enter username'
@@ -97,14 +72,28 @@
             font_size: 20
             size_hint: 0.5, 0.05
             pos_hint: {'center_x':.5, 'center_y':.8}
-        Label:
-            size_hint: 1, 0.2
+        Button:
+            text: 'Back'
+            on_press: root.manager.current = 'menu'
+            background_normal: 'button.png'
+            size_hint: 0.5, 0.05
+            font_size: 20
+            font_name: 'Lucida'
+            pos_hint: {'center_x':.5, 'center_y':.9}
 
 <SignupScreen>:
     BoxLayout:
         orientation: 'vertical'
         Label:
-            size_hint: 1, 0.3
+            size_hint_y: 0.1
+        Label:
+            text: 'Create an account to access Moodsense'
+            color: 0, 0, 0, 1
+            font_size: 25
+            halign: 'center'
+            size_hint_y: None
+            height: self.texture_size[1]
+            padding_y: 15
         TextInput:
             id: input_user
             hint_text:'Enter username'
@@ -125,17 +114,19 @@
         Button:
             text: 'Enter'
             background_normal: 'button.png'
-<<<<<<< HEAD
-            on_press: root.process()
-=======
             on_press: root.manager.current = 'home'
->>>>>>> 76bbdd9362168487bda6a583ce6ae0f5ed63e342
             font_name: 'Lucida'
             font_size: 20
             size_hint: 0.5, 0.05
             pos_hint: {'center_x':.5, 'center_y':.8}
-        Label:
-            size_hint: 1, 0.2
+        Button:
+            text: 'Back'
+            on_press: root.manager.current = 'menu'
+            background_normal: 'button.png'
+            size_hint: 0.5, 0.05
+            font_size: 20
+            font_name: 'Lucida'
+            pos_hint: {'center_x':.5, 'center_y':.9}
 
 <HomeScreen>:
     BoxLayout:
@@ -161,17 +152,6 @@
             font_size: 20
             font_name: 'Lucida'
         Button:
-<<<<<<< HEAD
-=======
-            text: 'Profile'
-            background_normal: 'button.png'
-            on_press: root.manager.current = 'profile'
-            font_size: 20
-            size_hint: 0.5, 0.05
-            pos_hint: {'center_x':.5, 'center_y':.9}
-            font_name: 'Lucida'
-        Button:
->>>>>>> 76bbdd9362168487bda6a583ce6ae0f5ed63e342
             text: 'Mood Log'
             background_normal: 'button.png'
             on_press: root.manager.current = 'log'
@@ -179,29 +159,51 @@
             size_hint: 0.5, 0.05
             font_size: 20
             font_name: 'Lucida'
-<<<<<<< HEAD
         Button:
             text: 'Logout'
             background_normal: 'button.png'
-            on_press: root.logout()
+            on_press: root.manager.current = 'menu'
             font_size: 20
             size_hint: 0.5, 0.05
             pos_hint: {'center_x':.5, 'center_y':.9}
-=======
 
-<ProfileScreen>:
+<CameraScreen>:
     BoxLayout:
-        Button:
-            text: 'Back'
-            on_press: root.manager.current = 'home'
-            background_normal: 'button.png'
-            size_hint: 0.5, 0.05
-            font_size: 20
->>>>>>> 76bbdd9362168487bda6a583ce6ae0f5ed63e342
+        orientation: 'vertical'
+        Label:
+            id: mood_label
+            text: 'Mood Detected: '
+            color: 0, 0, 0, 1
+            size_hint_y: None
+            halign: 'center'
+            font_size: 25
+            text_size: self.size
             font_name: 'Lucida'
+        Camera:
+            id: camera
+            play: True
+        Label:
+            size_hint: 1, 0.05
+        GridLayout:
+            cols: 1
+            rows: 2
+            Button:
+                text: 'Capture + Detect Mood'
+                on_press: root.detect_mood()
+                background_normal: 'button.png'
+                size_hint_y: None
+                font_size: 20
+            Button:
+                text: 'Back'
+                on_press: root.manager.current = 'home'
+                background_normal: 'button.png'
+                size_hint_y: None
+                font_size: 20
+                font_name: 'Lucida'
 
 <GalleryScreen>:
     BoxLayout:
+        orientation: 'vertical'
         GridLayout:
             cols: 3
             rows: 3
@@ -232,11 +234,13 @@
             Image:
                 id: image9
                 source: 'blank.png'
+        Label:
+            size_hint: 1, 0.05
         Button:
             text: 'Back'
             on_press: root.manager.current = 'home'
             background_normal: 'button.png'
-            size_hint: 0.5, 0.05
+            size_hint_y: 0.2
             font_size: 20
             font_name: 'Lucida'
 
@@ -248,20 +252,22 @@
             source: 'blank.png'
             size_hint: 1, 1
             pos_hint: {'center_x':.5, 'center_y':.25}
+        Label:
+            size_hint: 1, 0.05
         GridLayout:
-            cols: 2
-            rows: 1
+            cols: 1
+            rows: 2
             Button:
                 text: 'Generate pie chart'
                 on_press: root.pie_chart()
                 background_normal: 'button.png'
                 size_hint_y: None
-                height: '48dp'
-                width: '100dp'
-        Button:
-            text: 'Back'
-            on_press: root.manager.current = 'home'
-            background_normal: 'button.png'
-            size_hint: 0.5, 0.05
-            font_size: 20
-            font_name: 'Lucida'
+                font_size: 20
+            Button:
+                text: 'Back'
+                on_press: root.manager.current = 'home'
+                background_normal: 'button.png'
+                size_hint_y: None
+                font_size: 20
+                font_name: 'Lucida'
+                pos_hint: {'center_x':.5, 'center_y':.9}
