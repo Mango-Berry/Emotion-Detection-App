@@ -33,5 +33,3 @@ class Model(object):
         self.preds = self.loaded_model.predict(img)
         return Model.EMOTE_LIST[np.argmax(self.preds)]
             
-
-

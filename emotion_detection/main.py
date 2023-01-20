@@ -10,8 +10,11 @@ from kivy.core.text import LabelBase
 import time, glob
 import matplotlib.pyplot as plt
 import Process_Image as process_image
+import os, sys
+from kivy.resources import resource_add_path, resource_find
 
 Builder.load_file('emotion_detection/kv_file.kv')
+model = process_image.Model("emotion_detection/model.json", "emotion_detection/model_weights.h5")
 
 class MenuScreen(Screen):
     pass
@@ -20,26 +23,25 @@ class CameraScreen(Screen):
     def detect_mood(self):
         camera = self.ids.camera
         timestr = time.strftime("%Y%m%d_%H%M%S")
-        dict_labels = {'Angry': 1, 'Disgust': 2, 'Fear': 3, 'Happy': 4, 'Sad': 5, 'Surprised': 6, 'Neutral': 7}
         path = "emotion_detection/user_images/IMG_{}.png".format(timestr)
 
         camera.export_to_png(path)
 
-        model = process_image.Model("model.json", "model_weights.h5")
         img = model.load_img_from_path(path)
         mood = model.predict_emotion(img)
 
-        camera.export_to_png("emotion_detection/user_images_labeled/IMG_{}.png".format(dict_labels[mood]))
         self.ids.mood_label.text = "Mood Detected: " + mood
-        file = open("moodlog.txt", "a") 
+        file = open("emotion_detection/moodlog.txt", "a") 
         file.write("{}\n".format(mood))
         file.close()
         return 0
+    def on_enter(self):
+        self.ids.mood_label.text = "Mood Detected: "
 
 class GalleryScreen(Screen):
-    def __init__ (self, **kwargs):
-        self.name='gallery'
-        super().__init__(**kwargs)
+    def on_enter(self):
+        for i in range(1, 10):
+            self.ids['image{}'.format(i)].source = 'emotion_detection/blank.png'
         count = 1
         for file in sorted(glob.glob('emotion_detection/user_images/*.png')):
             if(count <= 9):
@@ -52,14 +54,13 @@ class LoginScreen(Screen):
     def process(self):
         username = self.ids.input_user.text
         password = self.ids.input_pass.text
-        # auth code
-        ScreenManager.switch_to = 'home'
+        self.manager.current = 'home'
 
 class SignupScreen(Screen):
     def process(self):
         username = self.ids.input_user.text
         password = self.ids.input_pass.text
-        # auth code
+        self.manager.current = 'home'
 
 class HomeScreen(Screen):
     pass
@@ -69,24 +70,35 @@ class ProfileScreen(Screen):
 
 class LogScreen(Screen):
     def pie_chart(self):
-        labels = 'Angry', 'Disgust', 'Fear', 'Happy', 'Sad', 'Surprised', 'Neutral'
+        labels = []
+        sizes = []
         dict_labels = {'Angry': 0, 'Disgust': 0, 'Fear': 0, 'Happy': 0, 'Sad': 0, 'Surprised': 0, 'Neutral': 0}
-        
-        file = open("moodlog.txt", "r") 
+        timestr = time.strftime("%Y%m%d_%H%M%S")
+
+        file = open("emotion_detection/moodlog.txt", "r") 
         for line in file.readlines():
             dict_labels[line.strip()] += 1
-        sizes = [dict_labels['Angry'], dict_labels['Disgust'], dict_labels['Fear'], dict_labels['Happy'], dict_labels['Sad'], dict_labels['Surprised'], dict_labels['Neutral'] ]
+        file.close()
+
+        for emote in dict_labels:
+            if dict_labels[emote] > 0:
+                labels.append(emote)
+                sizes.append(dict_labels[emote])
+        
         fig1, ax1 = plt.subplots()
         ax1.pie(sizes, labels=labels, autopct='%1.1f%%', shadow=True, startangle=90)
         ax1.axis('equal') 
-        plt.savefig('latest_plot.png')
-        self.ids.image.source = 'latest_plot.png'
+        plt.savefig('emotion_detection/user_plots/pie_chart_{}.png'.format(timestr))
+        self.ids.image.source = 'emotion_detection/user_plots/pie_chart_{}.png'.format(timestr)
+
+    def on_enter(self):
+        self.ids.image.source = 'emotion_detection/blank.png'
 
 class MainApp(App):
     def build(self):
         Window.clearcolor = (1, 1, 1, 1)
         LabelBase.register(name='Lucida',
-                      fn_regular='emotion_detection\lucida\Lucida.ttf')   
+                      fn_regular='emotion_detection/lucida/Lucida.ttf')   
         sm = ScreenManager(transition=NoTransition())
         sm.add_widget(MenuScreen(name='menu'))
         sm.add_widget(LoginScreen(name='login'))
@@ -97,4 +109,5 @@ class MainApp(App):
         sm.add_widget(ProfileScreen(name='profile'))
         sm.add_widget(LogScreen(name='log'))
         return sm
+
 MainApp().run()
