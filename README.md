@@ -3,7 +3,6 @@
 
 # The App
 - Because of local file splits there has been a lot of trouble packaging the app to function on different machines.
-- However, you can find a demo here:
 
 # How it works:
 - The nueral network found in the file GroupProjectCNN was trained on a database of over 22000 images.
