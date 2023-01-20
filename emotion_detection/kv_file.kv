@@ -1,0 +1,267 @@
+<CameraScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        Label:
+            id: mood_label
+            text: 'Mood Detected: '
+            color: 0, 0, 0, 1
+            size_hint_y: None
+            halign: 'center'
+            font_size: 25
+            text_size: self.size
+            font_name: 'Lucida'
+        Camera:
+            id: camera
+            play: True
+        GridLayout:
+            cols: 1
+            rows: 2
+            Button:
+                text: 'Capture + Detect Mood'
+                on_press: root.detect_mood()
+                background_normal: 'button.png'
+                size_hint_y: None
+                height: '48dp'
+                width: '100dp'
+            Button:
+                text: 'Back'
+                on_press: root.manager.current = 'home'
+                background_normal: 'button.png'
+                size_hint: 0.5, 0.05
+                font_size: 20
+                font_name: 'Lucida'
+        
+<MenuScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        Image:
+            source: 'moodsense.png'
+            size_hint: 0.75, 0.75
+            pos_hint: {'center_x': .5}
+        Label:
+            color: 0, 0, 0, 1
+            text: 'Detect emotions and facial expressions in real-time with machine learning'
+            size_hint_y: None
+            pos_hint: {'center_x':.5, 'center_y':.5}
+            halign: 'center'
+            font_size: 25
+            text_size: self.size
+            height: '100dp'
+            font_name: 'Lucida'
+        Button:
+            text: 'Login'
+            background_normal: 'button.png'
+            on_press: root.manager.current = 'login'
+            size_hint_y: None
+            height: '48dp'
+            width: '100dp'
+            font_size: 20
+            pos_hint: {'center_x':.5, 'center_y':.7}
+        Button:
+            text: 'Signup'
+            background_normal: 'button.png'
+            on_press: root.manager.current = 'signup'
+            pos_hint: {'center_x':.5, 'center_y': .8}
+            size_hint_y: None
+            font_size: 20
+            height: '48dp'
+            width: '100dp'
+
+<LoginScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        Label:
+            size_hint: 1, 0.3
+        TextInput:
+            id: input_user
+            hint_text:'Enter username'
+            multiline: False
+            font_size: 20
+            size_hint: 0.5, 0.05
+            pos_hint: {'center_x':.5, 'center_y':.6}
+        TextInput:
+            id: input_pass
+            hint_text:'Enter password'
+            multiline: False
+            password: True
+            size_hint: 0.5, 0.05
+            font_size: 20
+            pos_hint: {'center_x':.5, 'center_y':.7}
+        Label:
+            size_hint: 1, 0.05
+        Button:
+            text: 'Enter'
+            background_normal: 'button.png'
+            on_press: root.manager.current = 'home'
+            font_name: 'Lucida'
+            font_size: 20
+            size_hint: 0.5, 0.05
+            pos_hint: {'center_x':.5, 'center_y':.8}
+        Label:
+            size_hint: 1, 0.2
+
+<SignupScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        Label:
+            size_hint: 1, 0.3
+        TextInput:
+            id: input_user
+            hint_text:'Enter username'
+            multiline: False
+            font_size: 20
+            size_hint: 0.5, 0.05
+            pos_hint: {'center_x':.5, 'center_y':.6}
+        TextInput:
+            id: input_pass
+            hint_text:'Enter password'
+            multiline: False
+            password: True
+            size_hint: 0.5, 0.05
+            font_size: 20
+            pos_hint: {'center_x':.5, 'center_y':.7}
+        Label:
+            size_hint: 1, 0.05
+        Button:
+            text: 'Enter'
+            background_normal: 'button.png'
+<<<<<<< HEAD
+            on_press: root.process()
+=======
+            on_press: root.manager.current = 'home'
+>>>>>>> 76bbdd9362168487bda6a583ce6ae0f5ed63e342
+            font_name: 'Lucida'
+            font_size: 20
+            size_hint: 0.5, 0.05
+            pos_hint: {'center_x':.5, 'center_y':.8}
+        Label:
+            size_hint: 1, 0.2
+
+<HomeScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        Image:
+            source: 'moodsense.png'
+            size_hint: 0.6, 0.3
+            pos_hint: {'center_x':.5, 'center_y':.25}
+        Button:
+            text: 'Camera'
+            background_normal: 'button.png'
+            on_press: root.manager.current = 'camera_page'
+            size_hint: 0.5, 0.05
+            font_size: 20
+            pos_hint: {'center_x':.5, 'center_y':.7}
+            font_name: 'Lucida'
+        Button:
+            text: 'Gallery'
+            background_normal: 'button.png'
+            on_press: root.manager.current = 'gallery'
+            pos_hint: {'center_x':.5, 'center_y': .8}
+            size_hint: 0.5, 0.05
+            font_size: 20
+            font_name: 'Lucida'
+        Button:
+<<<<<<< HEAD
+=======
+            text: 'Profile'
+            background_normal: 'button.png'
+            on_press: root.manager.current = 'profile'
+            font_size: 20
+            size_hint: 0.5, 0.05
+            pos_hint: {'center_x':.5, 'center_y':.9}
+            font_name: 'Lucida'
+        Button:
+>>>>>>> 76bbdd9362168487bda6a583ce6ae0f5ed63e342
+            text: 'Mood Log'
+            background_normal: 'button.png'
+            on_press: root.manager.current = 'log'
+            pos_hint: {'center_x':.5, 'center_y': 1}
+            size_hint: 0.5, 0.05
+            font_size: 20
+            font_name: 'Lucida'
+<<<<<<< HEAD
+        Button:
+            text: 'Logout'
+            background_normal: 'button.png'
+            on_press: root.logout()
+            font_size: 20
+            size_hint: 0.5, 0.05
+            pos_hint: {'center_x':.5, 'center_y':.9}
+=======
+
+<ProfileScreen>:
+    BoxLayout:
+        Button:
+            text: 'Back'
+            on_press: root.manager.current = 'home'
+            background_normal: 'button.png'
+            size_hint: 0.5, 0.05
+            font_size: 20
+>>>>>>> 76bbdd9362168487bda6a583ce6ae0f5ed63e342
+            font_name: 'Lucida'
+
+<GalleryScreen>:
+    BoxLayout:
+        GridLayout:
+            cols: 3
+            rows: 3
+            Image:
+                id: image1
+                source: 'blank.png'
+            Image:
+                id: image2
+                source: 'blank.png'
+            Image:
+                id: image3
+                source: 'blank.png'
+            Image:
+                id: image4
+                source: 'blank.png'
+            Image:
+                id: image5
+                source: 'blank.png'
+            Image:
+                id: image6
+                source: 'blank.png'
+            Image:
+                id: image7
+                source: 'blank.png'
+            Image:
+                id: image8
+                source: 'blank.png'
+            Image:
+                id: image9
+                source: 'blank.png'
+        Button:
+            text: 'Back'
+            on_press: root.manager.current = 'home'
+            background_normal: 'button.png'
+            size_hint: 0.5, 0.05
+            font_size: 20
+            font_name: 'Lucida'
+
+<LogScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        Image:
+            id: image
+            source: 'blank.png'
+            size_hint: 1, 1
+            pos_hint: {'center_x':.5, 'center_y':.25}
+        GridLayout:
+            cols: 2
+            rows: 1
+            Button:
+                text: 'Generate pie chart'
+                on_press: root.pie_chart()
+                background_normal: 'button.png'
+                size_hint_y: None
+                height: '48dp'
+                width: '100dp'
+        Button:
+            text: 'Back'
+            on_press: root.manager.current = 'home'
+            background_normal: 'button.png'
+            size_hint: 0.5, 0.05
+            font_size: 20
+            font_name: 'Lucida'
